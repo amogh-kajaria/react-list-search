@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import './App.css';
+import uuid from 'react-uuid'
 
 function App() {
   const [friendName, setFriendName] = useState("");
@@ -10,7 +11,7 @@ function App() {
 
   const handleEnterPress = (e) => {
     if (e.key === 'Enter' && e.target.value !== '') {
-      setMainList([...mainList, { name: e.target.value, isFav: false }])
+      setMainList([...mainList, { name: e.target.value, isFav: false, id: uuid() }])
       setFriendName('');
       setSearchedList(mainList)
     }
@@ -20,18 +21,18 @@ function App() {
     setFriendName(e.target.value);
   }
 
-  const handleDelete = (selectedName) => {
+  const handleDelete = (id) => {
     if (window.confirm('Are you sure? Clicking OK will delete the entry and cannot be undone!')) {
       setMainList(
-        mainList.filter((ml) => ml.name !== selectedName)
+        mainList.filter((ml) => ml.id !== id)
       );
       setSearchedList(mainList)
     }
   }
 
-  const handleFavourite = (selectedName) => {
+  const handleFavourite = (id) => {
     const sortedList = mainList.map((ml) => {
-      if (ml.name === selectedName) {
+      if (ml.id === id) {
         ml.isFav = !ml.isFav;
       }
       return ml;
@@ -49,8 +50,9 @@ function App() {
   }
 
   useEffect(() => {
-    setSearchedList(mainList.filter((ml) =>
-      ml.name.toLowerCase().includes(friendName)
+    setSearchedList(mainList.filter((ml) => {
+      return ml.name.toLowerCase().includes(friendName.toLowerCase())
+    }
     ))
   }, [friendName, mainList]);
 
@@ -75,18 +77,18 @@ function App() {
     const endIndex = itemsPerPage * currentPage;
     const startIndex = endIndex - itemsPerPage;
     return searchedList.slice(startIndex, endIndex).map((sl, i) =>
-      <li key={`list-item-${i}`} className="list-item">
+      <li key={sl.id} className="list-item">
         <span>{sl.name}</span>
         <div className="actions-container">
           <button className={`favourite ${sl.isFav ? 'active' : ''}`} onClick={(e) => {
             e.stopPropagation();
             e.preventDefault();
-            handleFavourite(sl.name);
+            handleFavourite(sl.id);
           }}>&#9733;</button>
           <button className="delete" onClick={(e) => {
             e.stopPropagation();
             e.preventDefault();
-            handleDelete(sl.name);
+            handleDelete(sl.id);
           }}>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="gray" className="bi bi-trash" viewBox="0 0 16 16">
               <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />

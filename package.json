@@ -9,16 +9,17 @@
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-scripts": "4.0.3",
+    "react-uuid": "^1.0.2",
     "web-vitals": "^1.1.1"
   },
-  "homepage": "https://amogh-kajaria.github.io",
+  "homepage": "https://amogh-kajaria.github.io/react-list-search",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -b master -d build"
   },
   "eslintConfig": {
     "extends": [
